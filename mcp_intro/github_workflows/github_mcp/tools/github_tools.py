@@ -39,13 +39,15 @@ class GitHubIssueCrawler:
     
     def __init__(self, token: Optional[str] = None):
         self.token = token or os.getenv('GITHUB_TOKEN')
-        if not self.token:
-            raise ValueError("GitHub token is required. Set GITHUB_TOKEN environment variable.")
         
         self.headers = {
-            'Authorization': f'token {self.token}',
             'Accept': 'application/vnd.github.v3+json'
         }
+        
+        # Add authorization header if token is available
+        if self.token:
+            self.headers['Authorization'] = f'token {self.token}'
+        
         self.base_url = "https://api.github.com"
     
     def get_issues(self, repo: str, state: str = "open", since: Optional[str] = None) -> List[Dict]:
@@ -59,6 +61,16 @@ class GitHubIssueCrawler:
             params['since'] = since
             
         response = requests.get(url, headers=self.headers, params=params)
+        response.raise_for_status()
+        return response.json()
+    
+    def get_issue(self, repo: str, issue_number: int) -> Optional[Dict]:
+        """Get a specific issue by number"""
+        url = f"{self.base_url}/repos/{repo}/issues/{issue_number}"
+        
+        response = requests.get(url, headers=self.headers)
+        if response.status_code == 404:
+            return None
         response.raise_for_status()
         return response.json()
     
@@ -83,12 +95,22 @@ class GitHubIssueCrawler:
         comment_upper = comment_body.upper()
         return any(re.search(pattern, comment_upper, re.IGNORECASE) for pattern in epic_patterns)
     
-    def extract_epic_updates(self, repo: str, days_back: int = 30, start_date: str = None, end_date: str = None) -> List[EpicUpdate]:
-        """Extract EPIC updates from issues in the specified date range"""
+    def extract_epic_updates(self, repo: str, days_back: int = 30, start_date: str = None, end_date: str = None, issue_numbers: Optional[List[int]] = None) -> List[EpicUpdate]:
+        """Extract EPIC updates from issues in the specified date range
+        
+        Args:
+            repo: Repository name in format 'owner/repo'
+            days_back: Number of days to look back (default: 30)
+            start_date: Start date in YYYY-MM-DD format (optional)
+            end_date: End date in YYYY-MM-DD format (optional)
+            issue_numbers: Optional list of specific issue numbers to check
+        """
         if start_date:
             # Use specific date range
             start_dt = datetime.strptime(start_date, '%Y-%m-%d')
             end_dt = datetime.strptime(end_date, '%Y-%m-%d') if end_date else datetime.now()
+            print(">>>> start_dt", start_dt, type(start_dt))
+            print(">>>> end_dt", end_dt)
             since_date = start_dt.isoformat()
         else:
             # Use days_back
@@ -96,7 +118,20 @@ class GitHubIssueCrawler:
             start_dt = datetime.now() - timedelta(days=days_back)
             end_dt = datetime.now()
         
-        issues = self.get_issues(repo, since=since_date)
+        # Get issues - either all issues or specific ones
+        if issue_numbers:
+            # If specific issue numbers provided, get them individually
+            issues = []
+            for issue_num in issue_numbers:
+                try:
+                    issue = self.get_issue(repo, issue_num)
+                    if issue:
+                        issues.append(issue)
+                except Exception as e:
+                    print(f"Warning: Could not fetch issue #{issue_num}: {e}")
+        else:
+            # Get all issues in the date range
+            issues = self.get_issues(repo, since=since_date)
         
         epic_updates = []
         
@@ -206,7 +241,7 @@ class GitHubIssueCrawler:
             return None
 
 @mcp.tool()
-def crawl_epic_updates(repo: str, days_back: int = 30, start_date: str = None, end_date: str = None) -> str:
+def crawl_epic_updates(repo: str, days_back: int = 30, start_date: str = None, end_date: str = None, issue_numbers: str = None) -> str:
     """
     Crawl GitHub issues to find EPIC update comments from the last N days or specific date range.
     
@@ -215,13 +250,29 @@ def crawl_epic_updates(repo: str, days_back: int = 30, start_date: str = None, e
         days_back: Number of days to look back for updates (default: 30)
         start_date: Start date in YYYY-MM-DD format (optional, overrides days_back)
         end_date: End date in YYYY-MM-DD format (optional, defaults to today)
+        issue_numbers: Comma-separated list of specific issue numbers to check (optional, e.g., "151,152,153")
     
     Returns:
         JSON string containing all EPIC updates found
     """
     try:
         crawler = GitHubIssueCrawler()
-        epic_updates = crawler.extract_epic_updates(repo, days_back, start_date, end_date)
+        print(">>>> repo", repo)
+        print(">>>> days_back", days_back)
+        print(">>>> start_date", start_date)
+        print(">>>> end_date", end_date)
+        print(">>>> issue_numbers", issue_numbers)
+        
+        # Parse issue numbers if provided
+        parsed_issue_numbers = None
+        if issue_numbers:
+            try:
+                parsed_issue_numbers = [int(num.strip()) for num in issue_numbers.split(',')]
+                print(f"Parsed issue numbers: {parsed_issue_numbers}")
+            except ValueError as e:
+                return f"Error parsing issue numbers '{issue_numbers}': {str(e)}"
+        
+        epic_updates = crawler.extract_epic_updates(repo, days_back, start_date, end_date, parsed_issue_numbers)
         
         # Convert to serializable format
         updates_data = []
@@ -264,6 +315,72 @@ def crawl_epic_updates(repo: str, days_back: int = 30, start_date: str = None, e
         return f"Error crawling EPIC updates: {str(e)}"
 
 @mcp.tool()
+def crawl_specific_issues(repo: str, issue_numbers: str) -> str:
+    """
+    Crawl specific GitHub issues to find EPIC update comments.
+    
+    Args:
+        repo: Repository name in format 'owner/repo' (e.g., 'LDFLK/launch')
+        issue_numbers: Comma-separated list of issue numbers to check (e.g., "151,152,153")
+    
+    Returns:
+        JSON string containing all EPIC updates found in the specified issues
+    """
+    try:
+        crawler = GitHubIssueCrawler()
+        print(f">>>> Crawling specific issues: {issue_numbers} in {repo}")
+        
+        # Parse issue numbers
+        try:
+            parsed_issue_numbers = [int(num.strip()) for num in issue_numbers.split(',')]
+            print(f"Parsed issue numbers: {parsed_issue_numbers}")
+        except ValueError as e:
+            return f"Error parsing issue numbers '{issue_numbers}': {str(e)}"
+        
+        # Extract EPIC updates from specific issues (no date filtering)
+        epic_updates = crawler.extract_epic_updates(repo, days_back=36500, issue_numbers=parsed_issue_numbers)  # Large days_back to include all
+        
+        # Convert to serializable format
+        updates_data = []
+        for update in epic_updates:
+            update_data = {
+                'issue_number': update.issue_number,
+                'issue_title': update.issue_title,
+                'comment_id': update.comment_id,
+                'comment_body': update.comment_body,
+                'author': update.author,
+                'created_at': update.created_at,
+                'repo': update.repo
+            }
+            
+            # Add parsed data if available
+            if update.parsed_data:
+                update_data['parsed_data'] = {
+                    'date': update.parsed_data.date,
+                    'owner': update.parsed_data.owner,
+                    'epic_name': update.parsed_data.epic_name,
+                    'status': update.parsed_data.status,
+                    'progress': update.parsed_data.progress,
+                    'what_happened': update.parsed_data.what_happened,
+                    'scope_changes': update.parsed_data.scope_changes,
+                    'risks_blockers': update.parsed_data.risks_blockers,
+                    'next_steps': update.parsed_data.next_steps,
+                    'metrics_deliverables': update.parsed_data.metrics_deliverables
+                }
+            
+            updates_data.append(update_data)
+        
+        return {
+            'total_updates': len(updates_data),
+            'repo': repo,
+            'issue_numbers': parsed_issue_numbers,
+            'updates': updates_data
+        }
+    
+    except Exception as e:
+        return f"Error crawling specific issues: {str(e)}"
+
+@mcp.tool()
 def get_epic_updates_from_issue(issue_url: str, target_date: str = None) -> str:
     """
     Extract EPIC updates from a specific GitHub issue URL.
@@ -296,8 +413,6 @@ def get_epic_updates_from_issue(issue_url: str, target_date: str = None) -> str:
         if target_date:
             target_dt = datetime.strptime(target_date, '%Y-%m-%d')
         
-        print(">>>> comments", comments)
-        
         for comment in comments:
             # Filter by date if specified
             if target_dt:
@@ -323,7 +438,6 @@ def get_epic_updates_from_issue(issue_url: str, target_date: str = None) -> str:
         
         # Convert to serializable format
         updates_data = []
-        print(">>>> epic_updates", epic_updates)
         
         for update in epic_updates:
             update_data = {
@@ -388,7 +502,15 @@ def generate_board_report(epic_updates_data: str, format_type: str = "executive"
         report = f"#EPIC Update Report\n\n"
         report += f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
         report += f"**Repository:** {data['repo']}\n"
-        report += f"**Period:** Last {data['days_back']} days\n"
+        
+        # Handle different data sources (some have days_back, others don't)
+        if 'days_back' in data:
+            report += f"**Period:** Last {data['days_back']} days\n"
+        elif 'target_date' in data:
+            report += f"**Target Date:** {data['target_date']}\n"
+        else:
+            report += f"**Period:** All available updates\n"
+            
         report += f"**Total Updates:** {data['total_updates']}\n\n"
         
         if format_type == "summary":
@@ -512,7 +634,15 @@ def analyze_epic_trends(epic_updates_data: str) -> str:
         unique_authors = len(author_counts)
         
         analysis = f"# EPIC Updates Trend Analysis\n\n"
-        analysis += f"**Analysis Period:** Last {data['days_back']} days\n"
+        
+        # Handle different data sources (some have days_back, others don't)
+        if 'days_back' in data:
+            analysis += f"**Analysis Period:** Last {data['days_back']} days\n"
+        elif 'target_date' in data:
+            analysis += f"**Target Date:** {data['target_date']}\n"
+        else:
+            analysis += f"**Analysis Period:** All available updates\n"
+            
         analysis += f"**Repository:** {data['repo']}\n\n"
         
         analysis += "## Key Metrics\n\n"
@@ -605,7 +735,15 @@ def generate_epic_status_summary(epic_updates_data: str) -> str:
         summary = f"# EPIC Status Summary\n\n"
         summary += f"**Generated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n"
         summary += f"**Repository:** {data['repo']}\n"
-        summary += f"**Period:** Last {data['days_back']} days\n"
+        
+        # Handle different data sources (some have days_back, others don't)
+        if 'days_back' in data:
+            summary += f"**Period:** Last {data['days_back']} days\n"
+        elif 'target_date' in data:
+            summary += f"**Target Date:** {data['target_date']}\n"
+        else:
+            summary += f"**Period:** All available updates\n"
+            
         summary += f"**Total EPIC Updates:** {data['total_updates']}\n\n"
         
         # Status breakdown

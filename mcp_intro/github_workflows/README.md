@@ -18,6 +18,14 @@ A comprehensive Model Context Protocol (MCP) server implementation that provides
 - pip (Python package installer)
 - GitHub personal access token (for GitHub features)
 
+> **⚠️ IMPORTANT: GitHub Token Required**
+> 
+> **For Private Repositories:** You **MUST** set up a GitHub Personal Access Token to access private repositories in your personal account or organization.
+> 
+> **For Public Repositories:** A token is optional but recommended for higher rate limits.
+> 
+> See **[DEVELOPMENT.md](DEVELOPMENT.md)** for detailed token setup instructions.
+
 ### Basic Installation
 
 ```bash
@@ -73,6 +81,10 @@ github_workflows/
 ├── pyproject.toml           # Project configuration
 └── README.md               # This file
 ```
+
+## Development
+
+For comprehensive development information, including GitHub token setup, environment management, and contribution guidelines, see **[DEVELOPMENT.md](DEVELOPMENT.md)**.
 
 ## Testing
 
@@ -386,3 +398,16 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 ---
 
 **For more information about the overall project, see the main [README.md](../../README.md)**
+
+---
+
+## 🤖 **Generated with Cursor**
+
+This documentation was generated with the help of **Cursor**, an AI-powered code editor that provides intelligent assistance for documentation, code generation, and development workflows.
+
+**Cursor Features Used:**
+- 📝 **Documentation Generation** - AI-assisted writing and structuring
+- 🔧 **Code Analysis** - Intelligent code review and suggestions
+- 🎯 **Context Awareness** - Understanding of project structure and requirements
+- 📚 **Best Practices** - Integration of development standards and conventions
+

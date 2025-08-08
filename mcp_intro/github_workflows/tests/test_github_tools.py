@@ -271,6 +271,82 @@ class TestGitHubEpicTools:
             assert result['repo'] == "test-org/test-repo"
             assert len(result['updates']) == 1
 
+    def test_crawl_epic_updates_with_issue_numbers(self, sample_epic_template, github_token):
+        """Test crawling EPIC updates with specific issue numbers"""
+        with patch('github_mcp.tools.github_tools.GitHubIssueCrawler') as mock_crawler_class:
+            mock_crawler = Mock()
+            mock_crawler_class.return_value = mock_crawler
+            
+            # Create a mock EpicUpdate
+            mock_epic_update = EpicUpdate(
+                issue_number=151,
+                issue_title="Test Issue",
+                comment_id=12345,
+                comment_body=sample_epic_template,
+                author="test-user",
+                created_at="2025-01-15T14:30:00Z",
+                repo="test-org/test-repo",
+                parsed_data=Mock()
+            )
+            
+            mock_crawler.extract_epic_updates.return_value = [mock_epic_update]
+            
+            result = crawl_epic_updates(
+                "test-org/test-repo", 
+                issue_numbers="151,152,153"
+            )
+            
+            # Verify the result structure
+            assert isinstance(result, dict)
+            assert result['total_updates'] == 1
+            assert result['repo'] == "test-org/test-repo"
+            assert len(result['updates']) == 1
+
+    def test_crawl_specific_issues(self, sample_epic_template, github_token):
+        """Test crawling specific issues function"""
+        with patch('github_mcp.tools.github_tools.GitHubIssueCrawler') as mock_crawler_class:
+            mock_crawler = Mock()
+            mock_crawler_class.return_value = mock_crawler
+            
+            # Create a mock EpicUpdate
+            mock_epic_update = EpicUpdate(
+                issue_number=151,
+                issue_title="Test Issue",
+                comment_id=12345,
+                comment_body=sample_epic_template,
+                author="test-user",
+                created_at="2025-01-15T14:30:00Z",
+                repo="test-org/test-repo",
+                parsed_data=Mock()
+            )
+            
+            mock_crawler.extract_epic_updates.return_value = [mock_epic_update]
+            
+            # Import the function
+            from github_mcp.tools.github_tools import crawl_specific_issues
+            
+            result = crawl_specific_issues(
+                "test-org/test-repo", 
+                "151,152,153"
+            )
+            
+            # Verify the result structure
+            assert isinstance(result, dict)
+            assert result['total_updates'] == 1
+            assert result['repo'] == "test-org/test-repo"
+            assert result['issue_numbers'] == [151, 152, 153]
+            assert len(result['updates']) == 1
+
+    def test_crawl_epic_updates_invalid_issue_numbers(self, github_token):
+        """Test crawling EPIC updates with invalid issue numbers"""
+        result = crawl_epic_updates(
+            "test-org/test-repo", 
+            issue_numbers="151,invalid,153"
+        )
+        
+        # Should return error message
+        assert "Error parsing issue numbers" in result
+
     def test_get_epic_updates_from_issue_url(self, sample_github_data, sample_epic_template, github_token):
         """Test extracting EPIC updates from specific issue URL"""
         with patch('github_mcp.tools.github_tools.GitHubIssueCrawler') as mock_crawler_class:
@@ -452,10 +528,11 @@ class TestGitHubEpicTools:
 
     def test_error_handling(self):
         """Test error handling in various scenarios"""
-        # Test invalid GitHub token
+        # Test that GitHubIssueCrawler can be created without token (for public repos)
         with patch.dict(os.environ, {}, clear=True):
-            with pytest.raises(ValueError, match="GitHub token is required"):
-                GitHubIssueCrawler()
+            crawler = GitHubIssueCrawler()
+            assert crawler.token is None
+            assert 'Authorization' not in crawler.headers
         
         # Test invalid issue URL
         result = get_epic_updates_from_issue("invalid-url", "2025-01-15")
