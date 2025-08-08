@@ -18,10 +18,9 @@ import json
 from datetime import datetime
 from typing import List, Optional
 
-# Import the GitHub MCP tools
-from github_mcp.tools.github_tools import (
+# Import the GitHub MCP library
+from github_mcp import (
     crawl_specific_issues,
-    process_dated_epic_update,
     generate_board_report,
     generate_epic_status_summary
 )

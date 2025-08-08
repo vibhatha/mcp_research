@@ -1,0 +1,83 @@
+{
+  "repo": "LDFLK/launch",
+  "target_date": "2025-08-07",
+  "issue_numbers": [
+    144,
+    181
+  ],
+  "generated_at": "2025-08-08T13:31:47.436362",
+  "board_report": "#EPIC Update Report\n\n**Generated:** 2025-08-08 13:31:47\n**Repository:** LDFLK/launch\n**Period:** All available updates\n**Total Updates:** 2\n\n## Key EPIC Updates\n\n### Issue #144: [EPIC] OrgChart 2.0 Backend Phase 2\n**Latest Update:** 2025-08-07 by @github-actions[bot]\n\n**Epic:** <link or short name>\n**Owner:** @zaeema-n\n**Status:** On Track\n**Progress:** \n\n**Recent Progress:**\n- The modifications for the new president node are mostly done. However, we changed the MinorKind of the president node to citizen instead of president. This means that we need to change all mentions of its kind as well as modify the way we find the president node (i.e using the IS_PRESIDENT relationship instead of the MinorKind)\n\n**Risks/Blockers:**\n- None\n\n**Next Steps:**\n- Complete all changes to integrate the president node\n- Work on the GraphQL PoC\n\n### Issue #181: [EPIC] RAG for Nexoan and OrgChart\n**Latest Update:** 2025-08-07 by @github-actions[bot]\n\n**Epic:** RAG for Nexoan and OrgChart\n**Owner:** @ChanukaUOJ\n**Status:** On Track / At Risk / Off Track\n**Progress:** \n\n**Recent Progress:**\n- By exposing a Chat endpoint I added the functionalities to the chatbot. The below flow chart shows the underneath high level architecture for the chatbot. When the user enter the question it goes to the LLM and the prompt will help the LLM to generate the GraphQL query based on the given GraphQL schema. This GraphQL schema should be included in the prompt also. Once the LLM generates a response with the given format, it goes to the validation function which validates the generated GraphQL query. for that we can use a python package to validate the GraphQL query with the given schema. if the generated graphql query is valid then is ready to go to the GraphQL endpoint, otherwise it will go to the LLM again with the summarize prompt to give a user friendly response to the user. If the query is valid then it will be passed to the GraphQL endpoint call with the query and the variables. then once the LLM returns the response it will be send to the summarize prompt and generate a markdown text in a user friendly way. This is the flow for the chatbot\n\n**Risks/Blockers:**\n- The memory management part for the chatbot is still not completed.\n- need graphQL endpoint for testing purposes.\n\n**Next Steps:**\n- Going to add the memory management part to the chatbot and after that the architecture will be changed according to that. for now I'm planning to use Redis store as the database to store the chat history for the users.\n\n",
+  "status_summary": "# EPIC Status Summary\n\n**Generated:** 2025-08-08 13:31:47\n**Repository:** LDFLK/launch\n**Period:** All available updates\n**Total EPIC Updates:** 2\n\n## Status Breakdown\n\n- **On Track:** 1 epics\n- **On Track / At Risk / Off Track:** 1 epics\n\n## Epics with Risks/Blockers\n\n### <link or short name> (Owner: @zaeema-n)\n- None\n\n### RAG for Nexoan and OrgChart (Owner: @ChanukaUOJ)\n- The memory management part for the chatbot is still not completed.\n- need graphQL endpoint for testing purposes.\n\n## Epics with Scope Changes\n\n### <link or short name> (Owner: @zaeema-n)\n- MinorKind of the president node changed from president to citizen\n\n### RAG for Nexoan and OrgChart (Owner: @ChanukaUOJ)\n- Previously separate prompt for summarization is not added. So I decided to add that one.\n\n",
+  "raw_epic_data": {
+    "total_updates": 2,
+    "repo": "LDFLK/launch",
+    "issue_numbers": [
+      144,
+      181
+    ],
+    "updates": [
+      {
+        "issue_number": 144,
+        "issue_title": "[EPIC] OrgChart 2.0 Backend Phase 2",
+        "comment_id": 3163351071,
+        "comment_body": "<!-- epic-update-template -->\n## \ud83d\ude80 Epic Update\n\n**Date:** 2025-08-07\n**Owner:** @zaeema-n \n**Epic:** <link or short name>\n\n### Status\n- **Current status:** _On Track_\n- **Progress (%):** \n\n### What happened since last update\n- The modifications for the new president node are mostly done. However, we changed the MinorKind of the president node to citizen instead of president. This means that we need to change all mentions of its kind as well as modify the way we find the president node (i.e using the IS_PRESIDENT relationship instead of the MinorKind)\n\n### Scope changes\n- MinorKind of the president node changed from president to citizen\n\n### Risks / blockers\n- None\n\n### Next steps (with owners & dates)\n- Complete all changes to integrate the president node\n- Work on the GraphQL PoC\n\n### Metrics / deliverables\n- \n\n---\n\n> _Generated automatically because you typed `@epic-update`_",
+        "author": "github-actions[bot]",
+        "created_at": "2025-08-07T09:47:30Z",
+        "repo": "LDFLK/launch",
+        "parsed_data": {
+          "date": "2025-08-07",
+          "owner": "@zaeema-n",
+          "epic_name": "<link or short name>",
+          "status": "On Track",
+          "progress": "",
+          "what_happened": [
+            "The modifications for the new president node are mostly done. However, we changed the MinorKind of the president node to citizen instead of president. This means that we need to change all mentions of its kind as well as modify the way we find the president node (i.e using the IS_PRESIDENT relationship instead of the MinorKind)"
+          ],
+          "scope_changes": [
+            "MinorKind of the president node changed from president to citizen"
+          ],
+          "risks_blockers": [
+            "None"
+          ],
+          "next_steps": [
+            "Complete all changes to integrate the president node",
+            "Work on the GraphQL PoC"
+          ],
+          "metrics_deliverables": []
+        }
+      },
+      {
+        "issue_number": 181,
+        "issue_title": "[EPIC] RAG for Nexoan and OrgChart",
+        "comment_id": 3163353255,
+        "comment_body": "<!-- epic-update-template -->\n## \ud83d\ude80 Epic Update\n\n**Date:** 2025-08-07\n**Owner:** @ChanukaUOJ \n**Epic:** RAG for Nexoan and OrgChart\n\n### Status\n- **Current status:** _On Track / At Risk / Off Track_\n- **Progress (%):** \n\n### What happened since last update\n- By exposing a Chat endpoint I added the functionalities to the chatbot. The below flow chart shows the underneath high level architecture for the chatbot. When the user enter the question it goes to the LLM and the prompt will help the LLM to generate the GraphQL query based on the given GraphQL schema. This GraphQL schema should be included in the prompt also. Once the LLM generates a response with the given format, it goes to the validation function which validates the generated GraphQL query. for that we can use a python package to validate the GraphQL query with the given schema. if the generated graphql query is valid then is ready to go to the GraphQL endpoint, otherwise it will go to the LLM again with the summarize prompt to give a user friendly response to the user. If the query is valid then it will be passed to the GraphQL endpoint call with the query and the variables. then once the LLM returns the response it will be send to the summarize prompt and generate a markdown text in a user friendly way. This is the flow for the chatbot\n\n<img width=\"290\" height=\"642\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/fa0d4d9c-20f6-4692-b391-7a9228c05ac9\" />\n\nAlso I added the chatbot window in the frontend.\n\n### Scope changes\n- Previously separate prompt for summarization is not added. So I decided to add that one.\n\n### Risks / blockers\n- The memory management part for the chatbot is still not completed. \n- need graphQL endpoint for testing purposes.\n\n### Next steps (with owners & dates)\n- Going to add the memory management part to the chatbot and after that the architecture will be changed according to that. for now I'm planning to use Redis store as the database to store the chat history for the users.\n\n### Metrics / deliverables\n- Here i have attached the views for the chatbot\n\n<img width=\"1917\" height=\"915\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/c66e0eee-29e1-44a8-aa70-ce41b2c4f287\" />\n<img width=\"1918\" height=\"918\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/2431bbdb-07f4-45f7-8ed6-04fba7bcee08\" />\n\n\n---\n\n> _Generated automatically because you typed `@epic-update`_",
+        "author": "github-actions[bot]",
+        "created_at": "2025-08-07T09:48:14Z",
+        "repo": "LDFLK/launch",
+        "parsed_data": {
+          "date": "2025-08-07",
+          "owner": "@ChanukaUOJ",
+          "epic_name": "RAG for Nexoan and OrgChart",
+          "status": "On Track / At Risk / Off Track",
+          "progress": "",
+          "what_happened": [
+            "By exposing a Chat endpoint I added the functionalities to the chatbot. The below flow chart shows the underneath high level architecture for the chatbot. When the user enter the question it goes to the LLM and the prompt will help the LLM to generate the GraphQL query based on the given GraphQL schema. This GraphQL schema should be included in the prompt also. Once the LLM generates a response with the given format, it goes to the validation function which validates the generated GraphQL query. for that we can use a python package to validate the GraphQL query with the given schema. if the generated graphql query is valid then is ready to go to the GraphQL endpoint, otherwise it will go to the LLM again with the summarize prompt to give a user friendly response to the user. If the query is valid then it will be passed to the GraphQL endpoint call with the query and the variables. then once the LLM returns the response it will be send to the summarize prompt and generate a markdown text in a user friendly way. This is the flow for the chatbot"
+          ],
+          "scope_changes": [
+            "Previously separate prompt for summarization is not added. So I decided to add that one."
+          ],
+          "risks_blockers": [
+            "The memory management part for the chatbot is still not completed.",
+            "need graphQL endpoint for testing purposes."
+          ],
+          "next_steps": [
+            "Going to add the memory management part to the chatbot and after that the architecture will be changed according to that. for now I'm planning to use Redis store as the database to store the chat history for the users."
+          ],
+          "metrics_deliverables": [
+            "Here i have attached the views for the chatbot"
+          ]
+        }
+      }
+    ]
+  }
+}

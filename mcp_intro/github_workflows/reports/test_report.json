@@ -1,0 +1,49 @@
+{
+  "repo": "LDFLK/launch",
+  "target_date": "2025-08-07",
+  "issue_numbers": [
+    144
+  ],
+  "generated_at": "2025-08-08T13:24:19.334588",
+  "board_report": "#EPIC Update Report\n\n**Generated:** 2025-08-08 13:24:19\n**Repository:** LDFLK/launch\n**Period:** All available updates\n**Total Updates:** 1\n\n## Key EPIC Updates\n\n### Issue #144: [EPIC] OrgChart 2.0 Backend Phase 2\n**Latest Update:** 2025-08-07 by @github-actions[bot]\n\n**Epic:** <link or short name>\n**Owner:** @zaeema-n\n**Status:** On Track\n**Progress:** \n\n**Recent Progress:**\n- The modifications for the new president node are mostly done. However, we changed the MinorKind of the president node to citizen instead of president. This means that we need to change all mentions of its kind as well as modify the way we find the president node (i.e using the IS_PRESIDENT relationship instead of the MinorKind)\n\n**Risks/Blockers:**\n- None\n\n**Next Steps:**\n- Complete all changes to integrate the president node\n- Work on the GraphQL PoC\n\n",
+  "status_summary": "# EPIC Status Summary\n\n**Generated:** 2025-08-08 13:24:19\n**Repository:** LDFLK/launch\n**Period:** All available updates\n**Total EPIC Updates:** 1\n\n## Status Breakdown\n\n- **On Track:** 1 epics\n\n## Epics with Risks/Blockers\n\n### <link or short name> (Owner: @zaeema-n)\n- None\n\n## Epics with Scope Changes\n\n### <link or short name> (Owner: @zaeema-n)\n- MinorKind of the president node changed from president to citizen\n\n",
+  "raw_epic_data": {
+    "total_updates": 1,
+    "repo": "LDFLK/launch",
+    "issue_numbers": [
+      144
+    ],
+    "updates": [
+      {
+        "issue_number": 144,
+        "issue_title": "[EPIC] OrgChart 2.0 Backend Phase 2",
+        "comment_id": 3163351071,
+        "comment_body": "<!-- epic-update-template -->\n## \ud83d\ude80 Epic Update\n\n**Date:** 2025-08-07\n**Owner:** @zaeema-n \n**Epic:** <link or short name>\n\n### Status\n- **Current status:** _On Track_\n- **Progress (%):** \n\n### What happened since last update\n- The modifications for the new president node are mostly done. However, we changed the MinorKind of the president node to citizen instead of president. This means that we need to change all mentions of its kind as well as modify the way we find the president node (i.e using the IS_PRESIDENT relationship instead of the MinorKind)\n\n### Scope changes\n- MinorKind of the president node changed from president to citizen\n\n### Risks / blockers\n- None\n\n### Next steps (with owners & dates)\n- Complete all changes to integrate the president node\n- Work on the GraphQL PoC\n\n### Metrics / deliverables\n- \n\n---\n\n> _Generated automatically because you typed `@epic-update`_",
+        "author": "github-actions[bot]",
+        "created_at": "2025-08-07T09:47:30Z",
+        "repo": "LDFLK/launch",
+        "parsed_data": {
+          "date": "2025-08-07",
+          "owner": "@zaeema-n",
+          "epic_name": "<link or short name>",
+          "status": "On Track",
+          "progress": "",
+          "what_happened": [
+            "The modifications for the new president node are mostly done. However, we changed the MinorKind of the president node to citizen instead of president. This means that we need to change all mentions of its kind as well as modify the way we find the president node (i.e using the IS_PRESIDENT relationship instead of the MinorKind)"
+          ],
+          "scope_changes": [
+            "MinorKind of the president node changed from president to citizen"
+          ],
+          "risks_blockers": [
+            "None"
+          ],
+          "next_steps": [
+            "Complete all changes to integrate the president node",
+            "Work on the GraphQL PoC"
+          ],
+          "metrics_deliverables": []
+        }
+      }
+    ]
+  }
+}
