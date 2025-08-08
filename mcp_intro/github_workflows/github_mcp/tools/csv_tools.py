@@ -1,6 +1,19 @@
 # tools/csv_tools.py
 
-from server import mcp
+# Try to import MCP server, but make it optional
+try:
+    from server import mcp
+    MCP_AVAILABLE = True
+except ImportError:
+    MCP_AVAILABLE = False
+    # Create a dummy decorator for when MCP is not available
+    class DummyMCP:
+        def tool(self):
+            def decorator(func):
+                return func
+            return decorator
+    mcp = DummyMCP()
+
 from ..utils.file_reader import read_csv_summary
 import pandas as pd
 from pathlib import Path

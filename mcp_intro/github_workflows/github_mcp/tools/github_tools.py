@@ -6,7 +6,20 @@ from typing import List, Dict, Optional
 from datetime import datetime, timedelta
 from dataclasses import dataclass
 import requests
-from server import mcp
+
+# Try to import MCP server, but make it optional
+try:
+    from server import mcp
+    MCP_AVAILABLE = True
+except ImportError:
+    MCP_AVAILABLE = False
+    # Create a dummy decorator for when MCP is not available
+    class DummyMCP:
+        def tool(self):
+            def decorator(func):
+                return func
+            return decorator
+    mcp = DummyMCP()
 
 @dataclass
 class EpicUpdate:
@@ -85,11 +98,15 @@ class GitHubIssueCrawler:
     
     def is_epic_update_comment(self, comment_body: str) -> bool:
         """Check if a comment contains an EPIC update"""
+        # Skip comments that are just the trigger
+        comment_stripped = comment_body.strip()
+        if comment_stripped.lower() == '@epic-update':
+            return False
+            
         # Look for the specific EPIC update template pattern
         epic_patterns = [
             r'<!-- epic-update-template -->',
-            r'## 🚀 Epic Update',
-            r'@epic-update'
+            r'## 🚀 Epic Update'
         ]
         
         comment_upper = comment_body.upper()
