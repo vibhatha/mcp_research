@@ -26,6 +26,13 @@ from .tools.github_tools import (
 from .tools.csv_tools import summarize_csv_file, read_csv_file
 from .tools.parquet_tools import summarize_parquet_file, read_parquet_file
 
+# Import Reporting functions
+from .tools.reporting_tools import (
+    generate_epic_summary_report,
+    generate_individual_epic_summary,
+    generate_project_overview_summary
+)
+
 __all__ = [
     'GitHubIssueCrawler',
     'EpicUpdate', 
@@ -40,5 +47,8 @@ __all__ = [
     'summarize_csv_file',
     'read_csv_file',
     'summarize_parquet_file',
-    'read_parquet_file'
+    'read_parquet_file',
+    'generate_epic_summary_report',
+    'generate_individual_epic_summary',
+    'generate_project_overview_summary'
 ] 

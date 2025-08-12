@@ -1,0 +1,320 @@
+{
+  "repo": "LDFLK/launch",
+  "target_date": "2025-08-07",
+  "issue_numbers": [
+    144,
+    181,
+    134,
+    135,
+    150,
+    177,
+    179,
+    243,
+    125
+  ],
+  "generated_at": "2025-08-12T08:16:30.095362",
+  "board_report": "#EPIC Update Report\n\n**Generated:** 2025-08-12 08:16:30\n**Repository:** LDFLK/launch\n**Period:** All available updates\n**Total Updates:** 9\n\n## Key EPIC Updates\n\n### Issue #144: [EPIC] OrgChart 2.0 Backend Phase 2\n**Latest Update:** 2025-08-07 by @github-actions[bot]\n\n**Epic:** [[EPIC] OrgChart 2.0 Backend Phase 2](https://github.com/LDFLK/launch/issues/144)\n**Owner:** @zaeema-n\n**Status:** On Track\n**Progress:** \n\n**Recent Progress:**\n- The modifications for the new president node are mostly done. However, we changed the MinorKind of the president node to citizen instead of president. This means that we need to change all mentions of its kind as well as modify the way we find the president node (i.e using the IS_PRESIDENT relationship instead of the MinorKind)\n\n**Risks/Blockers:**\n- None\n\n**Next Steps:**\n- Complete all changes to integrate the president node\n- Work on the GraphQL PoC\n\n### Issue #181: [EPIC] RAG for Nexoan and OrgChart\n**Latest Update:** 2025-08-07 by @github-actions[bot]\n\n**Epic:** [[EPIC]RAG for Nexoan and OrgChart](https://github.com/LDFLK/launch/issues/181)\n**Owner:** @ChanukaUOJ\n**Status:** On Track\n**Progress:** \n\n**Recent Progress:**\n- By exposing a Chat endpoint I added the functionalities to the chatbot. The below flow chart shows the underneath high level architecture for the chatbot. When the user enter the question it goes to the LLM and the prompt will help the LLM to generate the GraphQL query based on the given GraphQL schema. This GraphQL schema should be included in the prompt also. Once the LLM generates a response with the given format, it goes to the validation function which validates the generated GraphQL query. for that we can use a python package to validate the GraphQL query with the given schema. if the generated graphql query is valid then is ready to go to the GraphQL endpoint, otherwise it will go to the LLM again with the summarize prompt to give a user friendly response to the user. If the query is valid then it will be passed to the GraphQL endpoint call with the query and the variables. then once the LLM returns the response it will be send to the summarize prompt and generate a markdown text in a user friendly way. This is the flow for the chatbot\n\n**Risks/Blockers:**\n- The memory management part for the chatbot is still not completed.\n- need graphQL endpoint for testing purposes.\n\n**Next Steps:**\n- Going to add the memory management part to the chatbot and after that the architecture will be changed according to that. for now I'm planning to use Redis store as the database to store the chat history for the users.\n\n### Issue #134: [EPIC] Nexoan Code Improvements\n**Latest Update:** 2025-08-12 by @github-actions[bot]\n\n**Epic:** [[EPIC] Nexoan Code Improvements](https://github.com/LDFLK/launch/issues/134)\n**Owner:** @sehansi-9\n**Status:** On Track\n**Progress:** \n\n**Recent Progress:**\n- Created a [PR](https://github.com/LDFLK/nexoan/pull/243) for refactoring internal APIs which needed restructuring.\n\n**Risks/Blockers:**\n- N/A\n\n**Next Steps:**\n- Under review.\n\n### Issue #135: [EPIC] Data Archive Platform\n**Latest Update:** 2025-08-07 by @github-actions[bot]\n\n**Epic:** [[EPIC] Data Archive Platform](https://github.com/LDFLK/launch/issues/135)\n**Owner:** @yasandu0505\n**Status:** On Track\n**Progress:** \n\n**Recent Progress:**\n- The initial workflow from data download, metadata gathering, tagging via AI and archiving in Google drive has been completed with a CLI.\n\n**Risks/Blockers:**\n- None\n\n**Next Steps:**\n- Working on a UI to visualize the workflow and enable logs and data gathering.\n\n### Issue #150: [EPIC] Data Collection for OrgChart 2.0\n**Latest Update:** 2025-08-07 by @github-actions[bot]\n\n**Epic:** [[EPIC] Data Collection for OrgChart 2.0](https://github.com/LDFLK/launch/issues/150)\n**Owner:** @Megatronn16\n**Status:** On Track\n**Progress:** \n\n**Recent Progress:**\n- CSV uploads for 2016/2017 are done.\n\n**Risks/Blockers:**\n- NA\n\n**Next Steps:**\n- CSV uploads for 2018/2019 have to be completed in the next sprint.\n\n### Issue #177: [EPIC] AI and Automation\n**Latest Update:** 2025-08-12 by @github-actions[bot]\n\n**Epic:** [[EPIC] AI and Automation](https://github.com/LDFLK/launch/issues/177)\n**Owner:** @vibhatha\n**Status:** On Track\n**Progress:** \n\n**Recent Progress:**\n- Focused more on getting AI workflows finalized with an MCP touch.\n\n**Risks/Blockers:**\n- N/A\n\n**Next Steps:**\n- Automating update crawling bi-weekly via a Github automation.\n\n### Issue #179: [EPIC] OrgChart Gazette Data Automation\n**Latest Update:** 2025-08-07 by @github-actions[bot]\n\n**Epic:** [[EPIC] OrgChart Gazette Data Automation](https://github.com/LDFLK/launch/issues/179)\n**Owner:** @sehansi-9\n**Status:** On Track\n**Progress:** \n\n**Recent Progress:**\n- Search functionality to get the last ministry a department was under\n- Implementation of the frontend\n\n**Risks/Blockers:**\n- Processing gazette types which has both amendments and tabular structures  https://github.com/LDFLK/launch/issues/214\n\n**Next Steps:**\n- Continue implementing the frontend for amendments and polish UI\n- Discuss about blockers\n- More testing and handling edge cases.\n\n### Issue #243: [EPIC]Implement MCP Architecture for Data Platform\n**Latest Update:** 2025-08-07 by @github-actions[bot]\n\n**Epic:** [[EPIC]Implement MCP Architecture for Data Platform](https://github.com/LDFLK/launch/issues/243)\n**Owner:** @Isuru-rangana\n**Status:** On Track\n**Progress:** 60%\n\n**Recent Progress:**\n- MCP research phase completed successfully.\n- Finalized MCP architecture design for the data platform\n- started implementation phase for the data platform\n\n**Risks/Blockers:**\n- No major blockers at this time\n- Complete Gazette Archiver implementation (@Isuru-rangana -by Aug 10)\n\n### Issue #125: [EPIC] HR and Admin\n**Latest Update:** 2025-08-07 by @github-actions[bot]\n\n**Epic:** [[EPIC] HR and Admin](https://github.com/LDFLK/launch/issues/125)\n**Owner:** @Megatronn16\n**Status:** On Track\n**Progress:** \n\n**Recent Progress:**\n- Salaries were processed and Payslips were sent.\n- EPF was paid and receipts were filed.\n- Access cards and lanyards are in review, changes were communicated after seeing the samples.\n\n**Risks/Blockers:**\n- NA\n\n**Next Steps:**\n- ETF needs to be posted.\n- Tags will be given once we approve the changes.\n\n",
+  "status_summary": "# EPIC Status Summary\n\n**Generated:** 2025-08-12 08:16:30\n**Repository:** LDFLK/launch\n**Period:** All available updates\n**Total EPIC Updates:** 9\n\n## Status Breakdown\n\n- **On Track:** 9 epics\n\n## Progress Overview\n\n- **[[EPIC]Implement MCP Architecture for Data Platform](https://github.com/LDFLK/launch/issues/243):** 60% (On Track)\n\n## Epics with Risks/Blockers\n\n### [[EPIC] OrgChart 2.0 Backend Phase 2](https://github.com/LDFLK/launch/issues/144) (Owner: @zaeema-n)\n- None\n\n### [[EPIC]RAG for Nexoan and OrgChart](https://github.com/LDFLK/launch/issues/181) (Owner: @ChanukaUOJ)\n- The memory management part for the chatbot is still not completed.\n- need graphQL endpoint for testing purposes.\n\n### [[EPIC] Nexoan Code Improvements](https://github.com/LDFLK/launch/issues/134) (Owner: @sehansi-9)\n- N/A\n\n### [[EPIC] Data Archive Platform](https://github.com/LDFLK/launch/issues/135) (Owner: @yasandu0505)\n- None\n\n### [[EPIC] Data Collection for OrgChart 2.0](https://github.com/LDFLK/launch/issues/150) (Owner: @Megatronn16)\n- NA\n\n## Epics with Scope Changes\n\n### [[EPIC] OrgChart 2.0 Backend Phase 2](https://github.com/LDFLK/launch/issues/144) (Owner: @zaeema-n)\n- MinorKind of the president node changed from president to citizen\n\n### [[EPIC]RAG for Nexoan and OrgChart](https://github.com/LDFLK/launch/issues/181) (Owner: @ChanukaUOJ)\n- Previously separate prompt for summarization is not added. So I decided to add that one.\n\n### [[EPIC] Nexoan Code Improvements](https://github.com/LDFLK/launch/issues/134) (Owner: @sehansi-9)\n- N/A\n\n### [[EPIC] Data Archive Platform](https://github.com/LDFLK/launch/issues/135) (Owner: @yasandu0505)\n- None\n\n### [[EPIC] Data Collection for OrgChart 2.0](https://github.com/LDFLK/launch/issues/150) (Owner: @Megatronn16)\n- NA\n\n",
+  "raw_epic_data": {
+    "total_updates": 9,
+    "repo": "LDFLK/launch",
+    "issue_numbers": [
+      144,
+      181,
+      134,
+      135,
+      150,
+      177,
+      179,
+      243,
+      125
+    ],
+    "updates": [
+      {
+        "issue_number": 144,
+        "issue_title": "[EPIC] OrgChart 2.0 Backend Phase 2",
+        "comment_id": 3163351071,
+        "comment_body": "<!-- epic-update-template -->\n## \ud83d\ude80 Epic Update\n\n**Date:** 2025-08-07\n**Owner:** @zaeema-n \n**Epic:** [[EPIC] OrgChart 2.0 Backend Phase 2](https://github.com/LDFLK/launch/issues/144)\n\n### Status\n- **Current status:** On Track\n- **Progress (%):** \n\n### What happened since last update\n- The modifications for the new president node are mostly done. However, we changed the MinorKind of the president node to citizen instead of president. This means that we need to change all mentions of its kind as well as modify the way we find the president node (i.e using the IS_PRESIDENT relationship instead of the MinorKind)\n\n### Scope changes\n- MinorKind of the president node changed from president to citizen\n\n### Risks / blockers\n- None\n\n### Next steps (with owners & dates)\n- Complete all changes to integrate the president node\n- Work on the GraphQL PoC\n\n### Metrics / deliverables\n- \n\n---\n\n> _Generated automatically because you typed `@epic-update`_",
+        "author": "github-actions[bot]",
+        "created_at": "2025-08-07T09:47:30Z",
+        "repo": "LDFLK/launch",
+        "parsed_data": {
+          "date": "2025-08-07",
+          "owner": "@zaeema-n",
+          "epic_name": "[[EPIC] OrgChart 2.0 Backend Phase 2](https://github.com/LDFLK/launch/issues/144)",
+          "status": "On Track",
+          "progress": "",
+          "what_happened": [
+            "The modifications for the new president node are mostly done. However, we changed the MinorKind of the president node to citizen instead of president. This means that we need to change all mentions of its kind as well as modify the way we find the president node (i.e using the IS_PRESIDENT relationship instead of the MinorKind)"
+          ],
+          "scope_changes": [
+            "MinorKind of the president node changed from president to citizen"
+          ],
+          "risks_blockers": [
+            "None"
+          ],
+          "next_steps": [
+            "Complete all changes to integrate the president node",
+            "Work on the GraphQL PoC"
+          ],
+          "metrics_deliverables": []
+        }
+      },
+      {
+        "issue_number": 181,
+        "issue_title": "[EPIC] RAG for Nexoan and OrgChart",
+        "comment_id": 3163353255,
+        "comment_body": "<!-- epic-update-template -->\n## \ud83d\ude80 Epic Update\n\n**Date:** 2025-08-07\n**Owner:** @ChanukaUOJ \n**Epic:** [[EPIC]RAG for Nexoan and OrgChart](https://github.com/LDFLK/launch/issues/181)\n\n### Status\n- **Current status:** On Track\n- **Progress (%):** \n\n### What happened since last update\n- By exposing a Chat endpoint I added the functionalities to the chatbot. The below flow chart shows the underneath high level architecture for the chatbot. When the user enter the question it goes to the LLM and the prompt will help the LLM to generate the GraphQL query based on the given GraphQL schema. This GraphQL schema should be included in the prompt also. Once the LLM generates a response with the given format, it goes to the validation function which validates the generated GraphQL query. for that we can use a python package to validate the GraphQL query with the given schema. if the generated graphql query is valid then is ready to go to the GraphQL endpoint, otherwise it will go to the LLM again with the summarize prompt to give a user friendly response to the user. If the query is valid then it will be passed to the GraphQL endpoint call with the query and the variables. then once the LLM returns the response it will be send to the summarize prompt and generate a markdown text in a user friendly way. This is the flow for the chatbot\n\n<img width=\"290\" height=\"642\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/fa0d4d9c-20f6-4692-b391-7a9228c05ac9\" />\n\nAlso I added the chatbot window in the frontend.\n\n### Scope changes\n- Previously separate prompt for summarization is not added. So I decided to add that one.\n\n### Risks / blockers\n- The memory management part for the chatbot is still not completed. \n- need graphQL endpoint for testing purposes.\n\n### Next steps (with owners & dates)\n- Going to add the memory management part to the chatbot and after that the architecture will be changed according to that. for now I'm planning to use Redis store as the database to store the chat history for the users.\n\n### Metrics / deliverables\n- Here i have attached the views for the chatbot\n\n<img width=\"1917\" height=\"915\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/c66e0eee-29e1-44a8-aa70-ce41b2c4f287\" />\n<img width=\"1918\" height=\"918\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/2431bbdb-07f4-45f7-8ed6-04fba7bcee08\" />\n\n\n---\n\n> _Generated automatically because you typed `@epic-update`_",
+        "author": "github-actions[bot]",
+        "created_at": "2025-08-07T09:48:14Z",
+        "repo": "LDFLK/launch",
+        "parsed_data": {
+          "date": "2025-08-07",
+          "owner": "@ChanukaUOJ",
+          "epic_name": "[[EPIC]RAG for Nexoan and OrgChart](https://github.com/LDFLK/launch/issues/181)",
+          "status": "On Track",
+          "progress": "",
+          "what_happened": [
+            "By exposing a Chat endpoint I added the functionalities to the chatbot. The below flow chart shows the underneath high level architecture for the chatbot. When the user enter the question it goes to the LLM and the prompt will help the LLM to generate the GraphQL query based on the given GraphQL schema. This GraphQL schema should be included in the prompt also. Once the LLM generates a response with the given format, it goes to the validation function which validates the generated GraphQL query. for that we can use a python package to validate the GraphQL query with the given schema. if the generated graphql query is valid then is ready to go to the GraphQL endpoint, otherwise it will go to the LLM again with the summarize prompt to give a user friendly response to the user. If the query is valid then it will be passed to the GraphQL endpoint call with the query and the variables. then once the LLM returns the response it will be send to the summarize prompt and generate a markdown text in a user friendly way. This is the flow for the chatbot"
+          ],
+          "scope_changes": [
+            "Previously separate prompt for summarization is not added. So I decided to add that one."
+          ],
+          "risks_blockers": [
+            "The memory management part for the chatbot is still not completed.",
+            "need graphQL endpoint for testing purposes."
+          ],
+          "next_steps": [
+            "Going to add the memory management part to the chatbot and after that the architecture will be changed according to that. for now I'm planning to use Redis store as the database to store the chat history for the users."
+          ],
+          "metrics_deliverables": [
+            "Here i have attached the views for the chatbot"
+          ]
+        }
+      },
+      {
+        "issue_number": 134,
+        "issue_title": "[EPIC] Nexoan Code Improvements",
+        "comment_id": 3177477392,
+        "comment_body": "<!-- epic-update-template -->\n## \ud83d\ude80 Epic Update\n\n**Date:** 2025-08-07\n**Owner:** @sehansi-9 \n**Epic:** [[EPIC] Nexoan Code Improvements](https://github.com/LDFLK/launch/issues/134)\n\n### Status\n- **Current status:** On Track\n- **Progress (%):** \n\n### What happened since last update\n-  Created a [PR](https://github.com/LDFLK/nexoan/pull/243) for refactoring internal APIs which needed restructuring. \n\n### Scope changes\n-  N/A\n\n### Risks / blockers\n- N/A\n\n### Next steps (with owners & dates)\n- Under review. \n\n### Metrics / deliverables\n- \n\n---\n\n> _Generated automatically because you typed `@epic-update`_",
+        "author": "github-actions[bot]",
+        "created_at": "2025-08-12T02:22:51Z",
+        "repo": "LDFLK/launch",
+        "parsed_data": {
+          "date": "2025-08-07",
+          "owner": "@sehansi-9",
+          "epic_name": "[[EPIC] Nexoan Code Improvements](https://github.com/LDFLK/launch/issues/134)",
+          "status": "On Track",
+          "progress": "",
+          "what_happened": [
+            "Created a [PR](https://github.com/LDFLK/nexoan/pull/243) for refactoring internal APIs which needed restructuring."
+          ],
+          "scope_changes": [
+            "N/A"
+          ],
+          "risks_blockers": [
+            "N/A"
+          ],
+          "next_steps": [
+            "Under review."
+          ],
+          "metrics_deliverables": []
+        }
+      },
+      {
+        "issue_number": 135,
+        "issue_title": "[EPIC] Data Archive Platform",
+        "comment_id": 3163358779,
+        "comment_body": "<!-- epic-update-template -->\n## \ud83d\ude80 Epic Update\n\n**Date:** 2025-08-07\n**Owner:** @yasandu0505 \n**Epic:** [[EPIC] Data Archive Platform](https://github.com/LDFLK/launch/issues/135)\n\n### Status\n- **Current status:** On Track\n- **Progress (%):** \n\n### What happened since last update\n- The initial workflow from data download, metadata gathering, tagging via AI and archiving in Google drive has been completed with a CLI. \n\n### Scope changes\n- None\n\n### Risks / blockers\n- None\n\n### Next steps (with owners & dates)\n- Working on a UI to visualize the workflow and enable logs and data gathering. \n\n### Metrics / deliverables\n- \n\n---\n\n> _Generated automatically because you typed `@epic-update`_",
+        "author": "github-actions[bot]",
+        "created_at": "2025-08-07T09:50:06Z",
+        "repo": "LDFLK/launch",
+        "parsed_data": {
+          "date": "2025-08-07",
+          "owner": "@yasandu0505",
+          "epic_name": "[[EPIC] Data Archive Platform](https://github.com/LDFLK/launch/issues/135)",
+          "status": "On Track",
+          "progress": "",
+          "what_happened": [
+            "The initial workflow from data download, metadata gathering, tagging via AI and archiving in Google drive has been completed with a CLI."
+          ],
+          "scope_changes": [
+            "None"
+          ],
+          "risks_blockers": [
+            "None"
+          ],
+          "next_steps": [
+            "Working on a UI to visualize the workflow and enable logs and data gathering."
+          ],
+          "metrics_deliverables": []
+        }
+      },
+      {
+        "issue_number": 150,
+        "issue_title": "[EPIC] Data Collection for OrgChart 2.0",
+        "comment_id": 3163366105,
+        "comment_body": "<!-- epic-update-template -->\n## \ud83d\ude80 Epic Update\n\n**Date:** 2025-08-07\n**Owner:** @Megatronn16 \n**Epic:** [[EPIC] Data Collection for OrgChart 2.0](https://github.com/LDFLK/launch/issues/150)\n\n### Status\n- **Current status:** On Track\n- **Progress (%):** \n\n### What happened since last update\n- CSV uploads for 2016/2017 are done. \n\n### Scope changes\n- NA\n\n### Risks / blockers\n- NA\n\n### Next steps (with owners & dates)\n- CSV uploads for 2018/2019 have to be completed in the next sprint. \n\n### Metrics / deliverables\n- NA\n\n---\n\n> _Generated automatically because you typed `@epic-update`_",
+        "author": "github-actions[bot]",
+        "created_at": "2025-08-07T09:52:34Z",
+        "repo": "LDFLK/launch",
+        "parsed_data": {
+          "date": "2025-08-07",
+          "owner": "@Megatronn16",
+          "epic_name": "[[EPIC] Data Collection for OrgChart 2.0](https://github.com/LDFLK/launch/issues/150)",
+          "status": "On Track",
+          "progress": "",
+          "what_happened": [
+            "CSV uploads for 2016/2017 are done."
+          ],
+          "scope_changes": [
+            "NA"
+          ],
+          "risks_blockers": [
+            "NA"
+          ],
+          "next_steps": [
+            "CSV uploads for 2018/2019 have to be completed in the next sprint."
+          ],
+          "metrics_deliverables": [
+            "NA"
+          ]
+        }
+      },
+      {
+        "issue_number": 177,
+        "issue_title": "[EPIC] AI and Automation",
+        "comment_id": 3177480611,
+        "comment_body": "<!-- epic-update-template -->\n## \ud83d\ude80 Epic Update\n\n**Date:** 2025-08-07\n**Owner:** @vibhatha \n**Epic:**[[EPIC] AI and Automation](https://github.com/LDFLK/launch/issues/177)\n\n### Status\n- **Current status:** On Track\n- **Progress (%):** \n\n### What happened since last update\n- Focused more on getting AI workflows finalized with an MCP touch. \n\n### Scope changes\n- Adding Github crawler via an MCP approach to get Github updates and summaries. \n\n### Risks / blockers\n- N/A\n\n### Next steps (with owners & dates)\n- Automating update crawling bi-weekly via a Github automation. \n\n### Metrics / deliverables\n- \n\n---\n\n> _Generated automatically because you typed `@epic-update`_",
+        "author": "github-actions[bot]",
+        "created_at": "2025-08-12T02:25:18Z",
+        "repo": "LDFLK/launch",
+        "parsed_data": {
+          "date": "2025-08-07",
+          "owner": "@vibhatha",
+          "epic_name": "[[EPIC] AI and Automation](https://github.com/LDFLK/launch/issues/177)",
+          "status": "On Track",
+          "progress": "",
+          "what_happened": [
+            "Focused more on getting AI workflows finalized with an MCP touch."
+          ],
+          "scope_changes": [
+            "Adding Github crawler via an MCP approach to get Github updates and summaries."
+          ],
+          "risks_blockers": [
+            "N/A"
+          ],
+          "next_steps": [
+            "Automating update crawling bi-weekly via a Github automation."
+          ],
+          "metrics_deliverables": []
+        }
+      },
+      {
+        "issue_number": 179,
+        "issue_title": "[EPIC] OrgChart Gazette Data Automation",
+        "comment_id": 3162580998,
+        "comment_body": "<!-- epic-update-template -->\n## \ud83d\ude80 Epic Update\n\n**Date:** 2025-08-07\n**Owner:** @sehansi-9 \n**Epic:** [[EPIC] OrgChart Gazette Data Automation](https://github.com/LDFLK/launch/issues/179)\n\n### Status\n- **Current status:** On Track\n- **Progress (70%):** \n\n### What happened since last update\n\n- Search functionality to get the last ministry a department was under \nThis was implemented for initial gazettes as of now. This becomes important when an initial gazette is not the starting point of the workflow. This is done assuming https://github.com/LDFLK/gztprocessor/issues/4\n- Implementation of the frontend\n       The auditing process for the initial gazettes is currently implemented, but few polishes to the UI needs to be done \n\n### Scope changes\n-  Currently it is intended to serve initial gazettes and pure amendments.\n\n### Risks / blockers\n-  Processing gazette types which has both amendments and tabular structures  https://github.com/LDFLK/launch/issues/214\n\n### Next steps (with owners & dates)\n-  Continue implementing the frontend for amendments and polish UI\n-  Discuss about blockers \n-  More testing and handling edge cases.\n\n### Metrics / deliverables\n\n\n---\n\n> _Generated automatically because you typed `@epic-update`_",
+        "author": "github-actions[bot]",
+        "created_at": "2025-08-07T05:46:50Z",
+        "repo": "LDFLK/launch",
+        "parsed_data": {
+          "date": "2025-08-07",
+          "owner": "@sehansi-9",
+          "epic_name": "[[EPIC] OrgChart Gazette Data Automation](https://github.com/LDFLK/launch/issues/179)",
+          "status": "On Track",
+          "progress": "",
+          "what_happened": [
+            "Search functionality to get the last ministry a department was under",
+            "Implementation of the frontend"
+          ],
+          "scope_changes": [
+            "Currently it is intended to serve initial gazettes and pure amendments."
+          ],
+          "risks_blockers": [
+            "Processing gazette types which has both amendments and tabular structures  https://github.com/LDFLK/launch/issues/214"
+          ],
+          "next_steps": [
+            "Continue implementing the frontend for amendments and polish UI",
+            "Discuss about blockers",
+            "More testing and handling edge cases."
+          ],
+          "metrics_deliverables": []
+        }
+      },
+      {
+        "issue_number": 243,
+        "issue_title": "[EPIC]Implement MCP Architecture for Data Platform",
+        "comment_id": 3162607267,
+        "comment_body": "<!-- epic-update-template -->\n## \ud83d\ude80 Epic Update\n\n**Date:** 2025-08-07\n**Owner:** @Isuru-rangana \n**Epic:** [[EPIC]Implement MCP Architecture for Data Platform](https://github.com/LDFLK/launch/issues/243)\n\n### Status\n- **Current status:** On Track\n- **Progress (%):** 60%\n\n### What happened since last update\n- MCP research phase completed successfully.\n- Finalized MCP architecture design for the data platform\n- started implementation phase for the data platform\n- Gazette Extractor MCP server fully completed\n- Started work on Gazette Archiver (partially done)\n\n### Scope changes\n- No scope changes\n\n### Risks / blockers\n- No major blockers at this time\n\n### Next steps\n-  Complete Gazette Archiver implementation (@Isuru-rangana -by Aug 10)\n- Begin Gazette Processor development (@Isuru-rangana)\n- Start Nexoan Chatbot integration (@Isuru-rangana)\n\n\n### Metrics / deliverables\n- Research on MCP #244 : Completed\n- MCP Architecture Design #245 : Completed  \n- Gazette Extractor MCP server:  Completed\n- Gazette Archiver:  In Progress\n\n---\n\n> _Generated automatically because you typed `@epic-update`_",
+        "author": "github-actions[bot]",
+        "created_at": "2025-08-07T05:57:49Z",
+        "repo": "LDFLK/launch",
+        "parsed_data": {
+          "date": "2025-08-07",
+          "owner": "@Isuru-rangana",
+          "epic_name": "[[EPIC]Implement MCP Architecture for Data Platform](https://github.com/LDFLK/launch/issues/243)",
+          "status": "On Track",
+          "progress": "60%",
+          "what_happened": [
+            "MCP research phase completed successfully.",
+            "Finalized MCP architecture design for the data platform",
+            "started implementation phase for the data platform",
+            "Gazette Extractor MCP server fully completed",
+            "Started work on Gazette Archiver (partially done)"
+          ],
+          "scope_changes": [
+            "No scope changes"
+          ],
+          "risks_blockers": [
+            "No major blockers at this time",
+            "Complete Gazette Archiver implementation (@Isuru-rangana -by Aug 10)",
+            "Begin Gazette Processor development (@Isuru-rangana)",
+            "Start Nexoan Chatbot integration (@Isuru-rangana)"
+          ],
+          "next_steps": [],
+          "metrics_deliverables": [
+            "Research on MCP #244 : Completed",
+            "MCP Architecture Design #245 : Completed",
+            "Gazette Extractor MCP server:  Completed",
+            "Gazette Archiver:  In Progress"
+          ]
+        }
+      },
+      {
+        "issue_number": 125,
+        "issue_title": "[EPIC] HR and Admin",
+        "comment_id": 3163348592,
+        "comment_body": "<!-- epic-update-template -->\n## \ud83d\ude80 Epic Update\n\n**Date:** 2025-08-07\n**Owner:** @Megatronn16 \n**Epic:** [[EPIC] HR and Admin](https://github.com/LDFLK/launch/issues/125)\n\n### Status\n- **Current status:** On Track\n- **Progress (%):** \n\n### What happened since last update\n- Salaries were processed and Payslips were sent. \n- EPF was paid and receipts were filed.\n- Access cards and lanyards are in review, changes were communicated after seeing the samples. \n\n### Scope changes\n-  NA\n\n### Risks / blockers\n-  NA\n\n### Next steps (with owners & dates)\n-  ETF needs to be posted. \n- Tags will be given once we approve the changes. \n\n### Metrics / deliverables\n- NA\n\n---\n\n> _Generated automatically because you typed `@epic-update`_",
+        "author": "github-actions[bot]",
+        "created_at": "2025-08-07T09:46:36Z",
+        "repo": "LDFLK/launch",
+        "parsed_data": {
+          "date": "2025-08-07",
+          "owner": "@Megatronn16",
+          "epic_name": "[[EPIC] HR and Admin](https://github.com/LDFLK/launch/issues/125)",
+          "status": "On Track",
+          "progress": "",
+          "what_happened": [
+            "Salaries were processed and Payslips were sent.",
+            "EPF was paid and receipts were filed.",
+            "Access cards and lanyards are in review, changes were communicated after seeing the samples."
+          ],
+          "scope_changes": [
+            "NA"
+          ],
+          "risks_blockers": [
+            "NA"
+          ],
+          "next_steps": [
+            "ETF needs to be posted.",
+            "Tags will be given once we approve the changes."
+          ],
+          "metrics_deliverables": [
+            "NA"
+          ]
+        }
+      }
+    ]
+  }
+}

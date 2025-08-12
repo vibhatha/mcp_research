@@ -17,12 +17,14 @@ import sys
 import json
 from datetime import datetime
 from typing import List, Optional
+from pathlib import Path
 
 # Import the GitHub MCP library
 from github_mcp import (
     crawl_specific_issues,
     generate_board_report,
-    generate_epic_status_summary
+    generate_epic_status_summary,
+    generate_epic_summary_report
 )
 
 
@@ -115,6 +117,34 @@ def validate_repo(repo_string: str) -> str:
     return repo_string
 
 
+def create_date_folder_structure(target_date: str, base_output_dir: str = "reports") -> tuple[str, str]:
+    """
+    Create a date-based folder structure for organizing reports.
+    
+    Args:
+        target_date: Target date in YYYY-MM-DD format
+        base_output_dir: Base directory for reports (default: "reports")
+        
+    Returns:
+        Tuple of (date_folder_path, full_output_path)
+    """
+    # Parse the date to create folder structure
+    try:
+        date_obj = datetime.strptime(target_date, '%Y-%m-%d')
+        year_month = date_obj.strftime('%Y-%m')
+        date_folder = date_obj.strftime('%Y-%m-%d')
+    except ValueError:
+        # If date parsing fails, use the date string as-is
+        year_month = target_date[:7] if len(target_date) >= 7 else target_date
+        date_folder = target_date
+    
+    # Create the folder structure
+    date_folder_path = Path(base_output_dir) / year_month / date_folder
+    date_folder_path.mkdir(parents=True, exist_ok=True)
+    
+    return str(date_folder_path), str(date_folder_path)
+
+
 def generate_epic_summary(repo: str, issue_numbers: List[int], target_date: str, output_path: str) -> None:
     """
     Generate EPIC summary for the given issues and save to output file.
@@ -175,18 +205,24 @@ def generate_epic_summary(repo: str, issue_numbers: List[int], target_date: str,
 def main():
     """Main CLI function."""
     parser = argparse.ArgumentParser(
-        description="Generate EPIC summaries from GitHub issues",
+        description="Generate EPIC summaries from GitHub issues. Reports are automatically organized in date-based folders (reports/YYYY-MM/YYYY-MM-DD/).",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Using issue numbers from command line
-  python epic_summary_generator.py --repo microsoft/vscode --date 2024-01-15 --output report.json --issues 151,152,153
+  # Using issue numbers from command line (creates reports/2025-08/2025-08-07/report.json)
+  python epic_summary_generator.py --repo LDFLK/launch --date 2025-08-07 --output report.json --issues 144
   
   # Using issue numbers from file
-  python epic_summary_generator.py --repo microsoft/vscode --date 2024-01-15 --output report.json --issues-file sample_issues.txt
+  python epic_summary_generator.py --repo LDFLK/launch --date 2025-08-07 --output report.json --issues-file sample_issues.txt
   
-  # Using issue numbers from file (alternative syntax)
-  python epic_summary_generator.py -r microsoft/vscode -d 2024-01-15 -o report.json -f sample_issues.txt
+  # Generate both JSON report and LLM summary
+  python epic_summary_generator.py --repo LDFLK/launch --date 2025-08-07 --output report.json --issues 144 --generate-summary
+  
+  # Generate summary with custom output path
+  python epic_summary_generator.py --repo LDFLK/launch --date 2025-08-07 --output report.json --issues 144 --generate-summary --summary-output summary.md
+  
+  # Use absolute paths to override folder structure
+  python epic_summary_generator.py --repo LDFLK/launch --date 2025-08-07 --output /absolute/path/report.json --issues 144
         """
     )
     
@@ -206,7 +242,7 @@ Examples:
     parser.add_argument(
         '--output', '-o',
         required=True,
-        help='Path to save the output report (JSON format)'
+        help='Path to save the output report (JSON format). Will be placed in reports/YYYY-MM/YYYY-MM-DD/ folder unless absolute path is specified.'
     )
     
     # Issue numbers source (mutually exclusive)
@@ -226,6 +262,17 @@ Examples:
         '--verbose', '-v',
         action='store_true',
         help='Enable verbose output'
+    )
+    
+    parser.add_argument(
+        '--generate-summary', '-s',
+        action='store_true',
+        help='Generate LLM-powered summary report in addition to JSON report'
+    )
+    
+    parser.add_argument(
+        '--summary-output',
+        help='Path to save the LLM summary report (default: <output>.md). Will be placed in reports/YYYY-MM/YYYY-MM-DD/ folder unless absolute path is specified.'
     )
     
     args = parser.parse_args()
@@ -248,11 +295,39 @@ Examples:
         print("❌ No valid issue numbers found.")
         sys.exit(1)
     
+    # Create date-based folder structure
+    date_folder_path, _ = create_date_folder_structure(target_date)
+    
+    # Update output paths to use the date folder
+    if not args.output.startswith('/') and not args.output.startswith('./'):
+        # If output is not an absolute path, place it in the date folder
+        output_filename = os.path.basename(args.output)
+        final_output_path = os.path.join(date_folder_path, output_filename)
+    else:
+        final_output_path = args.output
+    
+    # Determine summary output path
+    if args.generate_summary:
+        if args.summary_output:
+            if not args.summary_output.startswith('/') and not args.summary_output.startswith('./'):
+                # If summary output is not an absolute path, place it in the date folder
+                summary_filename = os.path.basename(args.summary_output)
+                final_summary_path = os.path.join(date_folder_path, summary_filename)
+            else:
+                final_summary_path = args.summary_output
+        else:
+            # Default summary output in the same date folder
+            summary_filename = f"{os.path.splitext(os.path.basename(final_output_path))[0]}.md"
+            final_summary_path = os.path.join(date_folder_path, summary_filename)
+    
     if args.verbose:
         print(f"🔍 Repository: {repo}")
         print(f"📅 Target date: {target_date}")
         print(f"📋 Issue numbers: {issue_numbers}")
-        print(f"💾 Output path: {args.output}")
+        print(f"📁 Date folder: {date_folder_path}")
+        print(f"💾 Output path: {final_output_path}")
+        if args.generate_summary:
+            print(f"📝 Summary output: {final_summary_path}")
     
     # Check if GitHub token is available
     if not os.getenv('GITHUB_TOKEN'):
@@ -260,8 +335,33 @@ Examples:
         print("   Set it with: export GITHUB_TOKEN='your-github-token'")
         print("   For public repositories, this may not be required.")
     
+    # Check if DeepSeek token is available for summary generation
+    if args.generate_summary and not os.getenv('DEEPSEEK_API_KEY'):
+        print("⚠️  Warning: DEEPSEEK_API_KEY environment variable not set")
+        print("   Set it with: export DEEPSEEK_API_KEY='your-deepseek-api-key'")
+        print("   Required for generating LLM-powered summaries.")
+    
     # Generate the EPIC summary
-    generate_epic_summary(repo, issue_numbers, target_date, args.output)
+    generate_epic_summary(repo, issue_numbers, target_date, final_output_path)
+    
+    # Generate LLM summary if requested
+    if args.generate_summary:
+        print(f"🤖 Generating LLM-powered summary...")
+        try:
+            # Read the generated JSON report
+            with open(final_output_path, 'r') as f:
+                report_data = json.load(f)
+            
+            # Generate the summary
+            summary_report = generate_epic_summary_report(json.dumps(report_data))
+            
+            # Save the summary
+            with open(final_summary_path, 'w') as f:
+                f.write(summary_report)
+            
+            print(f"✅ LLM summary saved to: {final_summary_path}")
+        except Exception as e:
+            print(f"❌ Error generating LLM summary: {e}")
 
 
 if __name__ == "__main__":

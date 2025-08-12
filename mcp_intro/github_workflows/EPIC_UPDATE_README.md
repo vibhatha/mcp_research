@@ -10,6 +10,8 @@ A command-line tool for generating comprehensive EPIC summaries from GitHub issu
 - **Date Filtering**: Filter updates by specific dates or date ranges
 - **Repository Support**: Works with both public and private repositories
 - **Comprehensive Validation**: Validates inputs and provides clear error messages
+- **LLM-Powered Summaries**: Generate human-readable summaries with issue links and Twitter-friendly content
+- **MCP Tools**: Available as MCP tools for integration with other systems
 
 ## Prerequisites
 
@@ -21,6 +23,10 @@ A command-line tool for generating comprehensive EPIC summaries from GitHub issu
 ### GitHub Access
 - **Public repositories**: No token required
 - **Private repositories**: GitHub Personal Access Token required
+
+### LLM Access (for Summaries)
+- **DeepSeek API**: Required for generating human-readable summaries
+- **API Key**: Set `DEEPSEEK_API_KEY` environment variable
 
 #### Setting up GitHub Token
 ```bash
@@ -37,6 +43,23 @@ source ~/.zshrc
 2. Generate new token (classic)
 3. Select scopes: `repo`, `read:org`, `read:user`
 4. Copy the token and set it as environment variable
+
+#### Setting up DeepSeek API Key
+```bash
+# Set environment variable
+export DEEPSEEK_API_KEY='your-deepseek-api-key'
+
+# Or add to your shell profile (~/.bashrc, ~/.zshrc, etc.)
+echo 'export DEEPSEEK_API_KEY="your-deepseek-api-key"' >> ~/.zshrc
+source ~/.zshrc
+```
+
+#### Getting a DeepSeek API Key
+1. Go to [DeepSeek Console](https://platform.deepseek.com/)
+2. Sign up or log in to your account
+3. Navigate to API Keys section
+4. Create a new API key
+5. Copy the key and set it as environment variable
 
 ## Installation
 
@@ -67,6 +90,27 @@ chmod +x epic_summary_generator.py
 ```bash
 python epic_summary_generator.py --repo <org/repo> --date <YYYY-MM-DD> --output <path> [--issues <numbers> | --issues-file <path>]
 ```
+
+### Folder Structure
+
+The tool automatically creates a date-based folder structure to organize reports:
+
+```
+reports/
+├── 2025-08/                    # Year-Month
+│   ├── 2025-08-07/            # Year-Month-Day
+│   │   ├── report.json         # JSON report
+│   │   └── summary.md          # LLM summary
+│   └── 2025-08-08/
+│       ├── report.json
+│       └── summary.md
+└── 2025-09/
+    └── 2025-09-01/
+        ├── report.json
+        └── summary.md
+```
+
+**Note**: You can override this structure by using absolute paths (e.g., `/absolute/path/report.json`).
 
 ### Required Parameters
 
@@ -151,9 +195,50 @@ python epic_summary_generator.py \
   --verbose
 ```
 
+## Generating LLM-Powered Summaries
+
+The `epic_summary_generator.py` can now generate both JSON reports and LLM-powered summaries in a single command.
+
+### Basic Usage
+
+```bash
+# Generate both JSON report and LLM summary (creates reports/2025-08/2025-08-07/report.json)
+python epic_summary_generator.py \
+  --repo LDFLK/launch \
+  --date 2025-08-07 \
+  --output report.json \
+  --issues 144 \
+  --generate-summary
+
+# Generate summary with custom output path
+python epic_summary_generator.py \
+  --repo LDFLK/launch \
+  --date 2025-08-07 \
+  --output report.json \
+  --issues 144 \
+  --generate-summary \
+  --summary-output summary.md
+```
+
+### Complete Workflow Example
+
+```bash
+# Generate both JSON report and LLM summary in one command
+# Creates folder structure: reports/2025-08/2025-08-07/
+python epic_summary_generator.py \
+  --repo LDFLK/launch \
+  --date 2025-08-07 \
+  --output epic_report.json \
+  --issues 144 \
+  --generate-summary \
+  --summary-output epic_summary.md
+```
+
 ## Output Format
 
-The tool generates a JSON file containing:
+### JSON Report Format
+
+The `epic_summary_generator.py` generates a JSON file containing:
 
 ```json
 {
@@ -192,6 +277,55 @@ The tool generates a JSON file containing:
     ]
   }
 }
+```
+
+### Markdown Summary Format
+
+The `epic_report_summarizer.py` generates a markdown file containing:
+
+```markdown
+# EPIC Summary Report
+
+**Generated:** 2024-01-15 10:30:00
+**Repository:** org/repo
+**Target Date:** 2024-01-15
+
+# Project EPIC Summary
+
+## Project Overview
+[Brief project overview]
+
+## Key Achievements
+[Key accomplishments across all EPICs]
+
+## Overall Status
+[General project status]
+
+## Twitter Summary (140 words)
+[Twitter-friendly overall summary]
+
+---
+
+## Individual EPIC Summaries
+
+## Issue #151: EPIC Title
+
+**Issue Link:** https://github.com/org/repo/issues/151
+
+### Work Summary
+[Detailed summary of work done]
+
+### Status
+- **Current Status:** On Track
+- **Progress:** 75%
+
+### Next Steps
+[Next steps]
+
+### Twitter Summary (140 words)
+[Twitter-friendly summary for this EPIC]
+
+---
 ```
 
 ## EPIC Update Comment Format
@@ -291,6 +425,26 @@ Error reading issue file: [Errno 2] No such file or directory
 2. **Special characters**: Check for encoding issues in comments
 3. **Template variations**: The tool supports common variations of the template
 
+## MCP Tools
+
+The EPIC summary functionality is also available as MCP tools for integration with other systems:
+
+### Available Tools
+
+- `generate_epic_summary_report`: Generate comprehensive summary reports from EPIC data
+- `generate_individual_epic_summary`: Generate summaries for individual EPIC updates
+- `generate_project_overview_summary`: Generate overall project summaries
+
+### Usage in MCP
+
+```python
+from github_mcp import generate_epic_summary_report
+
+# Generate summary from EPIC report data
+summary = generate_epic_summary_report(epic_report_json, output_format="markdown")
+print(summary)
+```
+
 ## Integration Examples
 
 ### With CI/CD Pipelines
@@ -303,19 +457,22 @@ Error reading issue file: [Errno 2] No such file or directory
       --repo ${{ github.repository }} \
       --date $(date +%Y-%m-%d) \
       --output epic_summary.json \
-      --issues-file epic_issues.txt
+      --issues-file epic_issues.txt \
+      --generate-summary
 ```
 
-### With Scripts
+### With Scripts (TODO)
 
 ```bash
 #!/bin/bash
-# Generate weekly EPIC summary
+# Generate weekly EPIC summary with LLM summary
 python epic_summary_generator.py \
   --repo myorg/myproject \
   --date $(date -d "last monday" +%Y-%m-%d) \
   --output weekly_epic_summary.json \
-  --issues-file weekly_epics.txt
+  --issues-file weekly_epics.txt \
+  --generate-summary \
+  --summary-output weekly_summary.md
 
 # Send to Slack or other tools
 curl -X POST -H 'Content-type: application/json' \
